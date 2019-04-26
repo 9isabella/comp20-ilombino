@@ -48,10 +48,11 @@
                 username field. This meant that I was
                 able to insert anything as a username, including a script. The issue could be resolved by using a
                 validator which would remove any
-                special characters.
+                special characters. First you'd have to require  the npm validator package and then use: username = validator.escape(username);
             </p>
-            <img src="XSS hack curl" />
-            
+            <img src="XSS hack curl.PNG" width=812/>
+            <img src="post error.PNG" width=812/>
+
         </li>
 
         <li>
