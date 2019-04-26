@@ -56,9 +56,20 @@
         </li>
 
         <li>
-            <h5>Undefined error in lat/lng post route</h5>
-            <p>
+            <h5>Undefined error in console through lat/lng post route</h5>
+            <p>This is a medium severity issue because it prevents the map from working (which is the whole point of the website),
+                but it does not cause a malicious attack. I found the issue by not entering in lat and/or lng in the curl post route.
+                This does not prevent the data from being stored in the database as it should (which is bad coding practice),
+                and instead just stores in null. The code only checks to make sure that lat, lng, and username are not undefined, so 
+                it does not catch the null values. Then, when Google Maps tries to render the map, this null value is read as undefined
+                and prevents the map from showing any icons, giving a console error (as seen below). This error could be corrected if 
+                instead of only checking to make sure lat, lng, and username are not undefined, also checking to make sure they are not null: 
+                if(username != undefined && username != null && lat != undefined && lat != null && lng != undefined && lng != null)
             </p>
+            <img src="null.PNG" width=812/>
+            <img src="undefined.PNG" width=812/>
+            <img src="XSS hack curl.PNG" width=812/>
+
         </li>
 
         <li>
