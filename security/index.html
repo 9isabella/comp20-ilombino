@@ -35,7 +35,8 @@
                 <p>This is a high severity issue because it allows anyone to insert any script into the database which is then executed when the
                     passenger.json get route is run. Although my script was just a simple alert, a malicious user could very easily insert a script that
                     caused real damage. I found the issue by observing that there was no validation in the post route username field. This meant that I was
-                    able to insert anything as a username, including a script. The issue could be resolved by using a validator. 
+                    able to insert anything as a username, including a script. The issue could be resolved by using a validator which would remove any 
+                    special characters. 
                 </p>
             </li>
         </ul>
