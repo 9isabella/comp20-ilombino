@@ -67,15 +67,23 @@
                 if(username != undefined && username != null && lat != undefined && lat != null && lng != undefined && lng != null)
             </p>
             <img src="null.PNG" width=812/>
-            <img src="undefined.PNG" width=812/>
             <img src="database.PNG" width=812/>
+            <img src="undefined.PNG" width=812/>
 
         </li>
 
         <li>
             <h5>Database leakage in passenger.json</h5>
-            <p>
+            <p>This is a high severity issue because it allows a user to see everyone's data rather than just their own. This database contains locational 
+                information which you would not want anyone who was not verified to get hold of, as they could use the data to track a user. In some database 
+                leaks of this sort, the issue could be even more severe if the database was storing highly sensitive data such as social security numbers. I 
+                discovered the issue by inserting [$ne] into the query string of passenger.json get route. This essentially shows all the passengers that are NOT the one 
+                username actually entered. In order to prevent against this, the key should 
+                also be checked, rather than just the value. This would prevent changing the key by adding [$ne] and having it still work. 
+
+                (Please note that the DIE NOW at the beginning of the screenshot is simply from the XSS vulnerability mentioned earlier and unrelated to this vulnerability.)
             </p>
+            <img src="url.PNG" width=812/> 
         </li>
     </ul>
 
