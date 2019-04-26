@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Union Strike Folk Song</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+    <h1 id="title">Union Strike Folk Song</h1>
+
+    <video src="https://www.cs.tufts.edu/comp/20/butwehavethepower.mp4" id="butwehavethepower" controls></video>
+    <div id="lyrics"></div>
+
+    <script>
+        // Complete this section and create a CSS file named style.css
+        var video = document.getElementById("butwehavethepower");
+        var lyrics = document.getElementById("lyrics");
+
+        var captionInfo = [
+            {startTime: 0, endTime: 5, caption: ""}, 
+            {startTime: 5, endTime: 8, caption: "Come gather round, children,"},
+            {startTime: 8, endTime: 10, caption: "It's high time ye learned"},
+            {startTime: 10, endTime: 13, caption: "'Bout a hero named Homer"},
+            {startTime: 13, endTime: 17, caption: "And a devil named Burns."},
+            {startTime: 17, endTime: 19, caption: "We'll march 'till we drop"},
+            {startTime: 19, endTime: 21, caption: "The girls and the fellas."},
+            {startTime: 21, endTime: 23, caption: "We'll fight 'till the death"},
+            {startTime: 23, endTime: 27, caption: "Or else fold like umbrellas."},
+            {startTime: 27, endTime: 38, caption: ""},
+            {startTime: 38, endTime: 40, caption: "So we'll march day and night"},
+            {startTime: 40, endTime: 43, caption: "By the big cooling tower."},
+            {startTime: 43, endTime: 45, caption: "They have the plant"},
+            {startTime: 45, endTime: 52, caption: "But we have the power."},
+            {startTime: 52, endTime: 55, caption: "Now do 'Classical Gas!'"},
+            {startTime: 55, endTime: 72, caption: ""},
+            {startTime: 72, endTime: 75, caption: "So we'll march day and night"},
+            {startTime: 75, endTime: 78, caption: "By the big cooling tower."},
+            {startTime: 78, endTime: 80, caption: "They have the plant"},
+            {startTime: 80, endTime: 82, caption: "But we have the power."},
+            {startTime: 82, endTime: 84, caption: "So we'll march day and night"},
+            {startTime: 84, endTime: 87, caption: "By the big cooling tower."},
+            {startTime: 87, endTime: 89, caption: "They have the plant"},
+            {startTime: 89, endTime: 92, caption: "But we have the power."},
+            {startTime: 92, endTime: 111, caption: ""}
+        ]
+
+        video.addEventListener("timeupdate", function() {
+            for(i = 0; i < captionInfo.length; i++) {
+                if(video.currentTime >= captionInfo[i].startTime && video.currentTime < captionInfo[i].endTime)
+                    lyrics.innerHTML = "<h3>" + captionInfo[i].caption + "</h3>";
+            };
+        });
+
+    </script>
+</body>
+
+</html>

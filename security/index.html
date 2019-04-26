@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+
+<html>
+
+    <head>
+        <title>Assignment 4</title>
+        <meta charset="utf-8" />
+    </head>
+
+    <body>
+        <h3>Introduction</h3>
+        <P>
+            I have been hired to find the vulnerabilities in the knockoff lift that my partner created. 
+            His product is supposed to allow users to connect with passengers (if they are a driver) and vehicles (if they are a passenger).
+            In order to do this, it stores some data about each user requesting a ride into a database. I will try to break the system he has created. 
+            In doing this task, I will hopefully allow him to understand where he needs to improve the security of the site. 
+        </P>
+        <h3>Methodology</h3>
+        <p>
+            I started off by using curl to navigate his website. I then began to poke around even further with curl, trying different ways to
+            get into the website. Considering the limited security precautions in place, this was a relatively straightforward task. 
+        </p>
+        <h3>Abstract of Findings</h3>
+        <p>
+            I found three major vulnerabilities in the knockoff lift site I was given. First off, I was able to see everyone's data. 
+            Ideally I should only see the data for a particular username, but I was able to bypass this and see everyone's data at once. 
+            Next, I was able to make a popup window appear on the page. Although my window was not malicious, this demonstrates how someone could 
+            infultrate the website and make whatever they wanted appear on the screen. 
+        </p>
+        <h3>Issues Found</h3>
+
+        <ul>
+            <li>
+                <h5>XSS in username post route</h5>
+                <p>This is a high severity issue because it allows anyone to insert any script into the database which is then executed when the
+                    passenger.json get route is run. Although my script was just a simple alert, a malicious user could very easily insert a script that
+                    caused real damage. I found the issue by observing that there was no validation in the post route username field. This meant that I was
+                    able to insert anything as a username, including a script. The issue could be resolved by using a validator. 
+                </p>
+            </li>
+        </ul>
+
+        <h3>Conclusion</h3>
+        <h3>References</h3>
+
+    </body>
+</html>

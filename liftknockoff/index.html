@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lift Knockoff</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9sQaGQMUn1TEZG3C11LjRlpQAppS4WGk&libraries=geometry"></script>
+
+
+    <script>
+        const MILECONVERT = 0.000621371;
+        var myLat = 0;
+        var myLng = 0;
+        var me = new google.maps.LatLng(myLat, myLng);
+        var myOptions = {
+            zoom: 10,
+            center: me,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map;
+
+        function init() {
+            map = new google.maps.Map(document.getElementById("map"), myOptions);
+            getMyLocation();
+        }
+
+        function getMyLocation() {
+            if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    myLat = position.coords.latitude;
+                    myLng = position.coords.longitude;
+                    renderMap();
+                    requestData();
+                });
+            } else {
+                alert("Geolocation is not supported by your web browser.  What a shame!");
+            }
+        }
+
+        var marker;
+        var infowindow = new google.maps.InfoWindow();
+        var myDist = 11951; //max distance away two points could be (1/2 the earth's circumfrence)
+        var myWeiner = 11951;
+
+        function renderMap() {
+            me = new google.maps.LatLng(myLat, myLng);
+            // Update map and go there...
+            map.panTo(me);
+
+            // Create a marker
+            marker = new google.maps.Marker({
+                icon: "dogo.png",
+                position: me,
+                title: "Username: bCxY6mCw"
+            });
+            marker.setZIndex(2);
+            marker.setMap(map);
+
+            // Open info window on click of marker
+            google.maps.event.addListener(marker, 'click', function () {
+                var infoContent = '<h4>Username: bCxY6mCw</h4><p>The nearest pickup is ' + myDist +
+                    ' and the Weinermobile is ' + myWeiner + ' .</p>'
+                infowindow.setContent(infoContent);
+                infowindow.open(map, marker);
+            });
+        }
+
+        function requestData() {
+            var xhr = new XMLHttpRequest();
+            var url = 'https://vast-thicket-78633.herokuapp.com/rides';
+            var param = 'username=bCxY6mCw&lat=' + myLat + '&lng=' + myLng;
+
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var passObj = JSON.parse(xhr.responseText);
+                    if (Object.keys(passObj)[0] == "passengers") { //for passengers
+                        for (i = 0; i < passObj.passengers.length; i++) {
+                            //create pass markers
+                            if (passObj.passengers[i].username == "WEINERMOBILE") {
+                                var pass = new google.maps.Marker({
+                                    icon: "weinermobile.png",
+                                    position: {
+                                        lat: passObj.passengers[i].lat,
+                                        lng: passObj.passengers[i].lng
+                                    },
+                                    title: "Username: " + passObj.passengers[i].username
+                                });
+                                var loc = new google.maps.LatLng(passObj.passengers[i].lat, passObj.passengers[i]
+                                    .lng);
+                                if (google.maps.geometry.spherical.computeDistanceBetween(me, loc) *MILECONVERT <
+                                    myWeiner) {
+                                    myWeiner = google.maps.geometry.spherical.computeDistanceBetween(me, loc) *
+                                        MILECONVERT + " miles away";
+                                }
+                            } else {
+                                var pass = new google.maps.Marker({
+                                    icon: "kitty.png",
+                                    position: {
+                                        lat: passObj.passengers[i].lat,
+                                        lng: passObj.passengers[i].lng
+                                    },
+                                    title: "Username: " + passObj.passengers[i].username
+                                });
+                                var loc = new google.maps.LatLng(passObj.passengers[i].lat, passObj.passengers[i].lng);
+                                if (google.maps.geometry.spherical.computeDistanceBetween(me, loc) * MILECONVERT <
+                                    myDist) {
+                                    myDist = google.maps.geometry.spherical.computeDistanceBetween(me, loc) *
+                                        MILECONVERT + " miles away";
+                                }
+                            }
+                            pass.setZIndex(1);
+                            pass.setMap(map);
+
+                            //create pass infowindows
+                            var passInfowindow = new google.maps.InfoWindow();
+                            let passInfoContent = '<h4>Username: ' + passObj.passengers[i].username +
+                                '</h4><p>They are ' + (google.maps.geometry.spherical.computeDistanceBetween(me,
+                                        loc) *
+                                    MILECONVERT) +
+                                ' miles away from you.</p>'
+                            google.maps.event.addListener(pass, 'click', function () {
+                                passInfowindow.setContent(passInfoContent);
+                                passInfowindow.open(map, this);
+                            });
+                        }
+                    } else if (Object.keys(passObj)[0] == "vehicles") { //for vehicles
+                        for (i = 0; i < vehicleObj.vehicles.length; i++) {
+                            //create car markers
+                            if (vehicleObj.vehicles[i].username == "WEINERMOBILE") {
+                                var car = new google.maps.Marker({
+                                    icon: "weinermobile.png",
+                                    position: {
+                                        lat: vehicleObj.vehicles[i].lat,
+                                        lng: vehicleObj.vehicles[i].lng
+                                    },
+                                    title: "Username: " + vehicleObj.vehicles[i].username
+                                });
+                                var loc = new google.maps.LatLng(vehicleObj.vehicles[i].lat, vehicleObj.vehicles[
+                                        i]
+                                    .lng);
+                                if (google.maps.geometry.spherical.computeDistanceBetween(me, loc) *
+                                    MILECONVERT <
+                                    myWeiner) {
+                                    myWeiner = google.maps.geometry.spherical.computeDistanceBetween(me, loc) *
+                                        MILECONVERT + " miles away";
+                                }
+                            } else {
+                                var car = new google.maps.Marker({
+                                    icon: "car.png",
+                                    position: {
+                                        lat: vehicleObj.vehicles[i].lat,
+                                        lng: vehicleObj.vehicles[i].lng
+                                    },
+                                    title: "Username: " + vehicleObj.vehicles[i].username
+                                });
+                                var loc = new google.maps.LatLng(vehicleObj.vehicles[i].lat, vehicleObj.vehicles[i]
+                                    .lng);
+                                if (google.maps.geometry.spherical.computeDistanceBetween(me, loc) * MILECONVERT <
+                                    myDist) {
+                                    myDist = google.maps.geometry.spherical.computeDistanceBetween(me, loc) *
+                                        MILECONVERT + " miles away";
+                                }
+                            }
+                            car.setZIndex(1);
+                            car.setMap(map);
+
+                            //create car infowindows
+                            var carInfowindow = new google.maps.InfoWindow();
+                            var carInfoContent = '<h4>Username: ' + vehicleObj.vehicles[i].username +
+                                '</h4><p>They are ' +
+                                (google.maps.geometry.spherical.computeDistanceBetween(me, loc) *
+                                    MILECONVERT) +
+                                ' miles away from you.</p>'
+                            google.maps.event.addListener(car, 'click', function () {
+                                carInfowindow.setContent(carInfoContent);
+                                carInfowindow.open(map, this);
+                            });
+                        }
+                    }
+                    if (myWeiner == 11951) {
+                        myWeiner = "not available!";
+                    }
+                }
+            }
+            xhr.send(param);
+        }
+    </script>
+</head>
+
+<body onload="init()">
+    <div id="map"></div>
+</body>
+
+</html>
